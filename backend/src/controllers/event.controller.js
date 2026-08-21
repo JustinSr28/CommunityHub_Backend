@@ -1,60 +1,79 @@
-const categoriesService = require("../services/category.service");
+const eventsService = require("../services/event.service");
 
-const getCategories = async (req, res, next) => {
+// CRUD EVENTS
+const getEvents = async (req, res, next) => {
   try {
-    const categories = await categoriesService.listCategories();
-    return res.json(categories);
+    const events = await eventsService.listEvents();
+
+    return res.json(events);
   } catch (error) {
     return next(error);
   }
 };
 
-const getCategoryById = async (req, res, next) => {
-  try {
-    const category = await categoriesService.findCategoryById(req.params.id);
 
-    if (!category) {
-      return res.status(404).json({ message: "Categoría no encontrada" });
+const getEventById = async (req, res, next) => {
+  try {
+    const event = await eventsService.findEventById(
+      req.params.id
+    );
+
+    if (!event) {
+      return res.status(404).json({
+        message: "Evento no encontrado"
+      });
     }
 
-    return res.json(category);
+    return res.json(event);
   } catch (error) {
     return next(error);
   }
 };
 
-const createCategory = async (req, res, next) => {
+const createEvent = async (req, res, next) => {
   try {
-    const category = await categoriesService.createCategory(req.body);
-    return res.status(201).json(category);
+    const event = await eventsService.createEvent(
+      req.body
+    );
+
+    return res.status(201).json(event);
   } catch (error) {
     return next(error);
   }
 };
 
-const updateCategory = async (req, res, next) => {
+
+const updateEvent = async (req, res, next) => {
   try {
-    const category = await categoriesService.updateCategory(
+    const event = await eventsService.updateEvent(
       req.params.id,
       req.body
     );
 
-    if (!category) {
-      return res.status(404).json({ message: "Categoría no encontrada" });
+    if (!event) {
+      return res.status(404).json({
+        message: "Evento no encontrado"
+      });
     }
 
-    return res.json(category);
+    return res.json(event);
   } catch (error) {
     return next(error);
   }
 };
 
-const deleteCategory = async (req, res, next) => {
+
+const deleteEvent = async (req, res, next) => {
   try {
-    const deleted = await categoriesService.removeCategory(req.params.id);
+    const deleted = await eventsService.removeEvent(
+      req.params.id
+    );
 
     if (!deleted) {
-      return res.status(404).json({ message: "Categoría no encontrada" });
+      return res.status(404).json({
+        message:
+          "Evento no encontrado o no se puede eliminar porque tiene inscripciones"
+      });
     }
 
     return res.status(204).send();
@@ -63,10 +82,109 @@ const deleteCategory = async (req, res, next) => {
   }
 };
 
+const getEventsByUser = async (req, res, next) => {
+  try {
+    const events = await eventsService.getEventsByUser(
+      req.params.userId
+    );
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getAvailableEventsForUser = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.getAvailableEventsForUser(
+        req.params.userId
+      );
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getEventsByOrganizer = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.getEventsByOrganizer(
+        req.params.organizerId
+      );
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// FiltrOS
+const getFilteredEvents = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.getFilteredEvents(
+        req.query
+      );
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+//admin dahs
+const getTotalEvents = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.loadTotalEvents();
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
+const getActiveEvents = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.loadActiveEvents();
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
+const getFinishedEvents = async (req, res, next) => {
+  try {
+    const events =
+      await eventsService.loadFinishedEvents();
+
+    return res.json(events);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
 module.exports = {
-  getCategories,
-  getCategoryById,
-  createCategory,
-  updateCategory,
-  deleteCategory
+  getEvents,
+  getEventById,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+
+  getEventsByUser,
+  getAvailableEventsForUser,
+  getEventsByOrganizer,
+
+  getFilteredEvents,
+
+  getTotalEvents,
+  getActiveEvents,
+  getFinishedEvents
 };

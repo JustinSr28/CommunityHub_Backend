@@ -13,17 +13,17 @@ const eventSchema = new mongoose.Schema(
       trim: true
     },
     category: {
-      type: String,
+      type: Number,
       required: [true, "El campo 'category' es obligatorio"],
       trim: true
     },
     date: {
-      type: date,
-      required: [true, "El campo 'date' es obligatorio"],
-      trim: true
+      type: Date,
+      required: [true, "El campo 'date' es obligatorio"]
     },
+
     time: {
-      type: datetime,
+      type: String,
       required: [true, "El campo 'time' es obligatorio"],
       trim: true
     },
