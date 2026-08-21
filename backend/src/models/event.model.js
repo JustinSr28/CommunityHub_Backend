@@ -43,18 +43,13 @@ const eventSchema = new mongoose.Schema(
       trim: true
     },
     organizer: {
-      type: String,
+      type: Number,
       required: [true, "El campo 'organizer' es obligatorio"],
       trim: true
     },
     status: {
       type: String,
       required: [true, "El campo 'status' es obligatorio"],
-      trim: true
-    },
-    date_of_creation: {
-      type: String,
-      required: [true, "El campo 'date_of_creation' es obligatorio"],
       trim: true
     }
   },
@@ -71,5 +66,6 @@ const eventSchema = new mongoose.Schema(
   }
 );
 
-const Product = mongoose.model("Product", productSchema);
-module.exports = Product;
+
+const Event = mongoose.model("Event", eventSchema);
+module.exports = Event;
