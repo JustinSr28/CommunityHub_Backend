@@ -43,9 +43,8 @@ const eventSchema = new mongoose.Schema(
       trim: true
     },
     organizer: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId, ref: "User",
       required: [true, "El campo 'organizer' es obligatorio"],
-      trim: true
     },
     status: {
       type: String,
