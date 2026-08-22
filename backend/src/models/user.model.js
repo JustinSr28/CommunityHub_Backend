@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'El nombre es obligatorio'],
       trim: true,
     },
-    lastName : {
+    lastName: {
       type: String,
       required: [true, "El campo 'lastName' es obligatorio"],
       trim: true
@@ -26,9 +26,32 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false, // así nunca viene por defecto en las queries
     },
-    urlPhoto : {
+    urlPhoto: {
       type: String,
       trim: true
+    },
+    role: {
+      type: String,
+      enum: ["user", "organizer", "admin"],
+      default: "user",
+      required: true
+    },
+
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+      required: true
+    },
+
+    favorites: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Event"
+        }
+      ],
+      default: []
     }
   },
   {

@@ -64,24 +64,39 @@ const editRegistration = async (req, res, next) => {
 const addRegistration = async (req, res, next) => {
   try {
     const eventId = req.params.id;
-    const userId = req.user?.id || req.body.user;
+    const userId = req.user._id;
 
-    const result = await registrationService.createRegistration(eventId, userId);
+    const result = await registrationService.createRegistration(
+      eventId,
+      userId
+    );
 
     if (result.error === "not_found") {
-      return res.status(404).json({ message: "El evento no existe." });
+      return res.status(404).json({
+        message: "El evento no existe."
+      });
     }
+
     if (result.error === "unavailable") {
-      return res.status(409).json({ message: "El evento no está disponible para inscripciones." });
+      return res.status(409).json({
+        message: "El evento no está disponible para inscripciones."
+      });
     }
+
     if (result.error === "duplicate") {
-      return res.status(409).json({ message: "Ya estás inscrito en este evento." });
+      return res.status(409).json({
+        message: "Ya estás inscrito en este evento."
+      });
     }
+
     if (result.error === "full") {
-      return res.status(409).json({ message: "No hay espacios disponibles." });
+      return res.status(409).json({
+        message: "No hay espacios disponibles."
+      });
     }
 
     return res.status(201).json(result.data);
+
   } catch (err) {
     return next(err);
   }
@@ -103,6 +118,29 @@ const removeRegistration = async (req, res, next) => {
   }
 };
 
+const getRegistrationByEventAndUser = async (req, res, next) => {
+  try {
+    const eventId = req.params.eventId;
+    const userId = req.user?.id || req.params.userId;
+
+    const registration =
+      await registrationService.getRegistrationByEventAndUser(
+        eventId,
+        userId
+      );
+
+    if (!registration) {
+      return res.status(404).json({
+        message: "El usuario no está inscrito en este evento."
+      });
+    }
+
+    return res.json(registration);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   getAllRegistrations,
   getRegistrationById,
@@ -111,5 +149,6 @@ module.exports = {
   getRegistrationsByUser,
   addRegistration,
   editRegistration,
-  removeRegistration
+  removeRegistration,
+  getRegistrationByEventAndUser
 };

@@ -51,18 +51,38 @@ const getRegistrationsByUser = async (userId) => {
   return Registration.find({ user: userId });
 };
 
+const getRegistrationByEventAndUser = async (eventId, userId) => {
+  if ( !mongoose.Types.ObjectId.isValid(eventId) || !mongoose.Types.ObjectId.isValid(userId)) {
+    return null;
+  }
+
+  return Registration.findOne({
+    event: eventId,
+    user: userId
+  });
+};
+
 // registration.service.js
 const createRegistration = async (eventId, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+
+  if (
+    !mongoose.Types.ObjectId.isValid(eventId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
     return { error: "not_found" };
   }
 
-  const existing = await Registration.findOne({ user: userId, event: eventId });
+  const existing = await Registration.findOne({
+    user: userId,
+    event: eventId
+  });
+
   if (existing) {
     return { error: "duplicate" };
   }
 
   const event = await Event.findById(eventId);
+
   if (!event) {
     return { error: "not_found" };
   }
@@ -70,15 +90,22 @@ const createRegistration = async (eventId, userId) => {
   const eventoNoDisponible = ["cancelado", "finalizado"].includes(
     event.status.toLowerCase()
   );
+
   if (eventoNoDisponible) {
     return { error: "unavailable" };
   }
 
-  
   const updatedEvent = await Event.findOneAndUpdate(
-    { _id: eventId, max_capacity: { $gt: 0 } },
-    { $inc: { max_capacity: -1 } },
-    { new: true }
+    {
+      _id: eventId,
+      max_capacity: { $gt: 0 }
+    },
+    {
+      $inc: { max_capacity: -1 }
+    },
+    {
+      new: true
+    }
   );
 
   if (!updatedEvent) {
@@ -108,14 +135,24 @@ const editRegistration = async (id, payload) => {
 };
 
 const removeRegistration = async (eventId, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+
+  if (
+    !mongoose.Types.ObjectId.isValid(eventId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
     return null;
   }
 
-  const deleted = await Registration.findOneAndDelete({ user: userId, event: eventId });
+  const deleted = await Registration.findOneAndDelete({
+    user: userId,
+    event: eventId
+  });
 
   if (deleted) {
-    await Event.findByIdAndUpdate(eventId, { $inc: { max_capacity: 1 } });
+    await Event.findByIdAndUpdate(
+      eventId,
+      { $inc: { max_capacity: 1 } }
+    );
   }
 
   return deleted;
@@ -129,5 +166,6 @@ module.exports = {
   getRegistrationsByUser,
   createRegistration,
   editRegistration,
-  removeRegistration
+  removeRegistration,
+  getRegistrationByEventAndUser
 };

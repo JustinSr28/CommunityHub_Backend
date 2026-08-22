@@ -1,8 +1,12 @@
 const express = require("express");
-
+const cors = require("cors")
 const app = express();
 
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:3001"
+}));
 
 //Para developer o guia
 app.get("/", (req, res) => {
@@ -18,10 +22,15 @@ app.get("/", (req, res) => {
 //RUTAS
 const authRoutes = require('./routes/auth.routes');
 const eventsRoutes = require('./routes/events.routes');
+const usersRoutes = require('./routes/users.routes');
+const categoryRoutes = require('./routes/categories.routes');
+const registrationsRoutes = require('./routes/registrations.routes');
+
 app.use('/api/auth', authRoutes);
-
 app.use("/api/events", eventsRoutes);
-
+app.use("/api/users", usersRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/registrations", registrationsRoutes);
 //Manejo de errores
 app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });

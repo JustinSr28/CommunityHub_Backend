@@ -32,16 +32,18 @@ const getEventById = async (req, res, next) => {
 
 const createEvent = async (req, res, next) => {
   try {
-    const event = await eventsService.createEvent(
-      req.body
-    );
+    const data = { ...req.body };
+    if (req.user.role === "organizer") {
+      data.organizer = req.user._id;
+    }
+
+    const event = await eventsService.createEvent(data);
 
     return res.status(201).json(event);
   } catch (error) {
     return next(error);
   }
 };
-
 
 const updateEvent = async (req, res, next) => {
   try {
@@ -120,6 +122,16 @@ const getEventsByOrganizer = async (req, res, next) => {
   }
 };
 
+const getEventLocations = async (req, res, next) => {
+  try {
+    const locations = await eventService.getEventLocations();
+
+    return res.json(locations);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // FiltrOS
 const getFilteredEvents = async (req, res, next) => {
   try {
@@ -181,6 +193,7 @@ module.exports = {
   getEventsByUser,
   getAvailableEventsForUser,
   getEventsByOrganizer,
+  getEventLocations,
 
   getFilteredEvents,
 

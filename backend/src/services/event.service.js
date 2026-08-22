@@ -15,8 +15,8 @@ const normalizePayload = (payload = {}) => {
   }
 
   if (payload.category !== undefined) {
-    normalized.category = Number(payload.category);
-  }
+  normalized.category = payload.category;
+}
 
   if (payload.date !== undefined) {
     normalized.date = payload.date;
@@ -39,7 +39,7 @@ const normalizePayload = (payload = {}) => {
   }
 
   if (payload.organizer !== undefined) {
-    normalized.organizer = Number(payload.organizer);
+    normalized.organizer = payload.organizer;
   }
 
   if (payload.status !== undefined) {
@@ -111,6 +111,13 @@ const removeEvent = async (id) => {
 
 //crud events terminasx----------------------------------
 
+const getOrganizers = async () => {
+  return User.find(
+    { role: "organizer" },
+    { _id: 1, name: 1, lastName: 1 }
+  ).sort({ name: 1 });
+};
+
 const getEventsByUser = async (userId) => {
   const registrations = await Registration.find({
     user: userId
@@ -151,6 +158,12 @@ const getEventsByOrganizer = async (organizerId) => {
     organizer: organizerId
   }).sort({ createdAt: -1 });
 
+};
+
+const getEventLocations = async () => {
+  const locations = await Event.distinct("location");
+
+  return locations.sort();
 };
 
 //filters
@@ -217,6 +230,8 @@ module.exports = {
   getEventsByUser,
   getAvailableEventsForUser,
   getEventsByOrganizer,
+  getOrganizers,
+  getEventLocations,
 
   getFilteredEvents,
 

@@ -3,11 +3,14 @@ const mongoose = require("mongoose");
 const registrationSchema = new mongoose.Schema(
   {
     user: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "El campo 'user' es obligatorio"]
     },
+
     event: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
       required: [true, "El campo 'event' es obligatorio"]
     },
     status: {
