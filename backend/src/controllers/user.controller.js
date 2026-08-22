@@ -157,6 +157,21 @@ const getTotalOrganizers = async (req, res, next) => {
   }
 };
 
+const getOrganizers = async (req, res, next) => {
+
+  try {
+
+    const organizers = await userService.getOrganizers();
+
+    return res.status(200).json(organizers);
+
+  } catch (error) {
+
+    return next(error);
+
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -167,5 +182,6 @@ module.exports = {
   getFavoriteEvents,
   toggleFavorite,
   getTotalUsers,
-  getTotalOrganizers
+  getTotalOrganizers,
+  getOrganizers
 };

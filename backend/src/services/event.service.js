@@ -111,13 +111,6 @@ const removeEvent = async (id) => {
 
 //crud events terminasx----------------------------------
 
-const getOrganizers = async () => {
-  return User.find(
-    { role: "organizer" },
-    { _id: 1, name: 1, lastName: 1 }
-  ).sort({ name: 1 });
-};
-
 const getEventsByUser = async (userId) => {
   const registrations = await Registration.find({
     user: userId
@@ -144,7 +137,8 @@ const getAvailableEventsForUser = async (userId) => {
 
   return Event.find({
     _id: { $nin: eventIds },
-    max_capacity: { $gt: 0 }
+    max_capacity: { $gt: 0 },
+    status: "activo"
   });
 };
 
@@ -172,7 +166,7 @@ const getFilteredEvents = async (filters = {}) => {
   const query = {};
 
   if (filters.category) {
-    query.category = Number(filters.category);
+    query.category = filters.category;
   }
 
   if (filters.date) {
@@ -192,7 +186,7 @@ const getFilteredEvents = async (filters = {}) => {
   }
 
   if (filters.organizer) {
-    query.organizer = Number(filters.organizer);
+    query.organizer = filters.organizer;
   }
 
   return Event.find(query).sort({
@@ -230,7 +224,6 @@ module.exports = {
   getEventsByUser,
   getAvailableEventsForUser,
   getEventsByOrganizer,
-  getOrganizers,
   getEventLocations,
 
   getFilteredEvents,

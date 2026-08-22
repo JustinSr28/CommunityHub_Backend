@@ -122,9 +122,10 @@ const getEventsByOrganizer = async (req, res, next) => {
   }
 };
 
+
 const getEventLocations = async (req, res, next) => {
   try {
-    const locations = await eventService.getEventLocations();
+    const locations = await eventsService.getEventLocations();
 
     return res.json(locations);
   } catch (error) {

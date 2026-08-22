@@ -150,6 +150,14 @@ const loadFavoriteEvents = async (userId) => {
   return user.favorites || [];
 };
 
+
+const getOrganizers = async () => {
+  return User.find(
+    { role: "organizer" },
+    { _id: 1, name: 1, lastName: 1 }
+  ).sort({ name: 1 });
+};
+
 //dasboar
 const loadTotalUsers = async () => {
   return User.countDocuments();
@@ -210,5 +218,6 @@ module.exports = {
   loadFavoriteEvents,
   loadTotalUsers,
   loadTotalOrganizers,
-  toggleFavorite
+  toggleFavorite,
+  getOrganizers
 };

@@ -9,6 +9,8 @@ router.get("/",  protect,userController.getUsers);
 
 router.get("/exists", protect,userController.checkUserExists);
 
+router.get("/organizers", protect , userController.getOrganizers);
+
 router.get("/dashboard/total", protect, authorizeRoles("admin"),userController.getTotalUsers);
 
 router.get("/dashboard/organizers",protect, authorizeRoles("admin"), userController.getTotalOrganizers);

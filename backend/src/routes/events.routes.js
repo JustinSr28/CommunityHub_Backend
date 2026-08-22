@@ -1,37 +1,108 @@
 const express = require("express");
 
 const eventController = require("../controllers/event.controller");
+
 const { protect } = require("../middleware/auth.middleware");
 const { authorizeRoles } = require("../middleware/role.middleware");
 
 const router = express.Router();
 
 
+// ===============================
+// GET
+// ===============================
 
 router.get("/", eventController.getEvents);
 
 router.get("/filter", eventController.getFilteredEvents);
 
-router.get("/:id", eventController.getEventById);
+router.get("/locations", eventController.getEventLocations);
 
-router.get( "/user/:userId/available", protect, eventController.getAvailableEventsForUser );
+router.get(
+  "/dashboard/total",
+  protect,
+  authorizeRoles("admin"),
+  eventController.getTotalEvents
+);
 
-router.get("/user/:userId", protect,eventController.getEventsByUser );
+router.get(
+  "/dashboard/active",
+  protect,
+  authorizeRoles("admin"),
+  eventController.getActiveEvents
+);
 
-router.get( "/organizer/:organizerId", protect,eventController.getEventsByOrganizer);
+router.get(
+  "/dashboard/finished",
+  protect,
+  authorizeRoles("admin"),
+  eventController.getFinishedEvents
+);
+
+router.get(
+  "/user/:userId/available",
+  protect,
+  eventController.getAvailableEventsForUser
+);
+
+router.get(
+  "/user/:userId",
+  protect,
+  eventController.getEventsByUser
+);
+
+router.get(
+  "/organizer/:organizerId",
+  protect,
+  eventController.getEventsByOrganizer
+);
 
 
-router.get("/dashboard/total", protect, authorizeRoles("admin"),eventController.getTotalEvents );
+// ===============================
+// GET EVENT BY ID
+// ===============================
+// Esta debe ir DESPUÉS de las rutas específicas.
 
-router.get( "/dashboard/active", protect,authorizeRoles("admin"), eventController.getActiveEvents );
+router.get(
+  "/:id",
+  eventController.getEventById
+);
 
-router.get( "/dashboard/finished", protect, authorizeRoles("admin"), eventController.getFinishedEvents );
 
-router.post( "/", protect,authorizeRoles("admin", "organizer"), eventController.createEvent );
+// ===============================
+// POST
+// ===============================
 
-router.put( "/:id", protect,authorizeRoles("admin", "organizer"),eventController.updateEvent );
+router.post(
+  "/",
+  protect,
+  authorizeRoles("admin", "organizer"),
+  eventController.createEvent
+);
 
-router.delete( "/:id", protect, authorizeRoles("admin", "organizer"),eventController.deleteEvent );
+
+// ===============================
+// PUT
+// ===============================
+
+router.put(
+  "/:id",
+  protect,
+  authorizeRoles("admin", "organizer"),
+  eventController.updateEvent
+);
+
+
+// ===============================
+// DELETE
+// ===============================
+
+router.delete(
+  "/:id",
+  protect,
+  authorizeRoles("admin", "organizer"),
+  eventController.deleteEvent
+);
 
 
 module.exports = router;
