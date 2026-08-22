@@ -13,9 +13,9 @@ const eventSchema = new mongoose.Schema(
       trim: true
     },
     category: {
-      type: Number,
-      required: [true, "El campo 'category' es obligatorio"],
-      trim: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: [true, "El campo 'category' es obligatorio"]
     },
     date: {
       type: Date,

@@ -90,17 +90,17 @@ const updateEvent = async (id, payload) => {
   );
 };
 
-
 const removeEvent = async (id) => {
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return false;
   }
 
-  const registrations = await Registration.findOne({
+  const registrationExists = await Registration.exists({
     event: id
   });
 
-  if (registrations) {
+  if (registrationExists) {
     return false;
   }
 
@@ -141,13 +141,17 @@ const getAvailableEventsForUser = async (userId) => {
   });
 };
 
-
 const getEventsByOrganizer = async (organizerId) => {
-  return Event.find({
-    organizer: Number(organizerId)
-  }).sort({ createdAt: -1 });
-};
 
+  if (!mongoose.Types.ObjectId.isValid(organizerId)) {
+    return [];
+  }
+
+  return Event.find({
+    organizer: organizerId
+  }).sort({ createdAt: -1 });
+
+};
 
 //filters
 const getFilteredEvents = async (filters = {}) => {
