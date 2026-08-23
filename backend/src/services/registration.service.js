@@ -13,6 +13,18 @@ const normalizePayload = (payload = {}) => {
   return normalized;
 };
 
+const getTotalRegistrations = async () => {
+  return Registration.countDocuments();
+};
+
+const countRegistrationsByEvent = async (eventId) => {
+  return Registration.countDocuments({ event: eventId, status: "confirmada" });
+};
+
+const getHistoryByUser = async (userId) => {
+  return Registration.find({ user: userId, status: "cancelada" });
+};
+
 // CRUD registrations
 const getAllRegistrations = async () => {
   return Registration.find().sort({ createdAt: -1 });
@@ -167,5 +179,6 @@ module.exports = {
   createRegistration,
   editRegistration,
   removeRegistration,
-  getRegistrationByEventAndUser
+  getRegistrationByEventAndUser,
+  getTotalRegistrations
 };

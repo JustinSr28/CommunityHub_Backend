@@ -25,12 +25,15 @@ const eventsRoutes = require('./routes/events.routes');
 const usersRoutes = require('./routes/users.routes');
 const categoryRoutes = require('./routes/categories.routes');
 const registrationsRoutes = require('./routes/registrations.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
 
 app.use('/api/auth', authRoutes);
 app.use("/api/events", eventsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/registrations", registrationsRoutes);
+app.use("/api", dashboardRoutes);
+
 //Manejo de errores
 app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });

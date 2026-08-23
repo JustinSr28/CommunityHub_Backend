@@ -1,11 +1,15 @@
 const express = require("express");
 
 const eventController = require("../controllers/event.controller");
+const registrationController = require("../controllers/registration.controller");
 
 const { protect } = require("../middleware/auth.middleware");
 const { authorizeRoles } = require("../middleware/role.middleware");
 
 const router = express.Router();
+
+router.post("/:id/register", protect, registrationController.addRegistration);
+router.delete("/:id/register", protect, registrationController.removeRegistration);
 
 
 // ===============================

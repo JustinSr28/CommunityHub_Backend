@@ -141,12 +141,15 @@ const logout = async (req, res) => {
 };
 // GET /api/auth/me
 const getMe = async (req, res) => {
-  // req.user ya viene del middleware "protect"
   return res.status(200).json({
     user: {
       id: req.user._id,
       name: req.user.name,
+      lastName: req.user.lastName,
       email: req.user.email,
+      urlPhoto: req.user.urlPhoto,
+      role: req.user.role,
+      status: req.user.status
     },
   });
 };
