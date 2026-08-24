@@ -180,5 +180,6 @@ module.exports = {
   editRegistration,
   removeRegistration,
   getRegistrationByEventAndUser,
-  getTotalRegistrations
+  getTotalRegistrations,
+  countRegistrationsByEvent
 };

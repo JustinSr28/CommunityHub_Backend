@@ -11,11 +11,6 @@ const router = express.Router();
 router.post("/:id/register", protect, registrationController.addRegistration);
 router.delete("/:id/register", protect, registrationController.removeRegistration);
 
-
-// ===============================
-// GET
-// ===============================
-
 router.get("/", eventController.getEvents);
 
 router.get("/filter", eventController.getFilteredEvents);
@@ -62,20 +57,12 @@ router.get(
 );
 
 
-// ===============================
-// GET EVENT BY ID
-// ===============================
-// Esta debe ir DESPUÉS de las rutas específicas.
-
 router.get(
   "/:id",
   eventController.getEventById
 );
 
 
-// ===============================
-// POST
-// ===============================
 
 router.post(
   "/",
@@ -85,9 +72,6 @@ router.post(
 );
 
 
-// ===============================
-// PUT
-// ===============================
 
 router.put(
   "/:id",
@@ -96,10 +80,6 @@ router.put(
   eventController.updateEvent
 );
 
-
-// ===============================
-// DELETE
-// ===============================
 
 router.delete(
   "/:id",
