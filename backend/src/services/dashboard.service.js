@@ -1,7 +1,33 @@
 const userService = require("./user.service");
 const eventsService = require("./event.service");
 const registrationService = require("./registration.service");
+const notificationService = require("./notification.service"); 
 
+const getUserStats = async (userId) => {
+  const [registeredEvents, favorites, notifications] = await Promise.all([
+    eventsService.getEventsByUser(userId),
+    userService.loadFavoriteEvents(userId),
+    notificationService.getNotificationsByUser(userId)
+  ]);
+
+  const today = new Date();
+
+  const upcoming = registeredEvents.filter(
+    (event) => event.status === "activo" && new Date(event.date) >= today
+  );
+
+  const history = registeredEvents.filter(
+    (event) => event.status === "finalizado" || new Date(event.date) < today
+  );
+
+  return {
+    upcoming,
+    registered: registeredEvents,
+    favorites,
+    history,
+    notifications
+  };
+};
 
 
 const getAdminStats = async () => {
@@ -61,29 +87,7 @@ const getOrganizerStats = async (organizerId) => {
 };
 
 
-const getUserStats = async (userId) => {
-  const [registeredEvents, favorites] = await Promise.all([
-    eventsService.getEventsByUser(userId),
-    userService.loadFavoriteEvents(userId)
-  ]);
 
-  const today = new Date();
-
-  const upcoming = registeredEvents.filter(
-    (event) => event.status === "activo" && new Date(event.date) >= today
-  );
-
-  const history = registeredEvents.filter(
-    (event) => event.status === "finalizado" || new Date(event.date) < today
-  );
-
-  return {
-    upcoming,
-    registered: registeredEvents,
-    favorites,
-    history
-  };
-};
 
 module.exports = { getAdminStats, getOrganizerStats, getUserStats };
 

@@ -4,6 +4,7 @@ const app = express();
 app.disable('etag');
 app.use(express.json());
 
+
 app.use(cors({
   origin: "http://localhost:3001"
 }));
@@ -26,6 +27,7 @@ const usersRoutes = require('./routes/users.routes');
 const categoryRoutes = require('./routes/categories.routes');
 const registrationsRoutes = require('./routes/registrations.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
+const notificationRoutes = require('./routes/notification.routes');
 
 app.use('/api/auth', authRoutes);
 app.use("/api/events", eventsRoutes);
@@ -33,6 +35,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/registrations", registrationsRoutes);
 app.use("/api", dashboardRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 //Manejo de errores
 app.use((req, res) => {
